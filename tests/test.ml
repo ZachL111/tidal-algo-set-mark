@@ -1,4 +1,4 @@
-#use "src/core.ml";;
+#use "core.ml";;
 
 let expect condition = if not condition then failwith "fixture mismatch";;
 let signal_case_1 = { demand = 76; capacity = 89; latency = 25; risk = 11; weight = 4 };;
@@ -11,7 +11,7 @@ let signal_case_3 = { demand = 68; capacity = 87; latency = 12; risk = 22; weigh
 expect (score signal_case_3 = 89);;
 expect (classify signal_case_3 = "review");;
 
-#use "src/review.ml";;
+#use "review.ml";;
 let domain_review = { signal = 57; slack = 41; drag = 8; confidence = 78 };;
 expect (review_score domain_review = 209);;
 expect (review_lane domain_review = "ship");;

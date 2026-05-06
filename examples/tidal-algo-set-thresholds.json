@@ -1,0 +1,17 @@
+{
+  "repo": "tidal-algo-set-mark",
+  "thresholds": {
+    "signal": 3,
+    "slack": 2,
+    "confidence": 2,
+    "drag": 4,
+    "ship": 169,
+    "watch": 119
+  },
+  "terms": [
+    "input width",
+    "search depth",
+    "boundary pressure",
+    "complexity"
+  ]
+}

@@ -58,6 +58,13 @@ foreach ($pathPattern in $knownPaths) {
   }
 }
 
-ocaml tests/test.ml
+ocaml -I src tests/test.ml
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-tidal-algo-set-detail.ps1
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-tidal-algo-set-properties.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-tidal-algo-set-golden.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
