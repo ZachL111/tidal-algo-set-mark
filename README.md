@@ -1,43 +1,68 @@
 # tidal-algo-set-mark
 
-tidal-algo-set-mark is a OCaml project for algorithms. It focuses on this technical goal: Package an OCaml local lab for set analysis with seeded input scenarios, deterministic summary checks, and documented operating limits.
+`tidal-algo-set-mark` packages a practical algorithms exercise in OCaml. The emphasis is on deterministic behavior, a small public API, and examples that explain the tradeoffs.
 
-## Why it exists
+## How I Read Tidal Algo Set Mark
 
-Small engineering tools are easiest to trust when their rules are explicit, testable, and cheap to run locally. This repository packages a focused model with fixture data and a local verification path so behavior can be reviewed without external services.
+The useful thing to inspect here is how the same score rule is represented in code, metadata, and examples. If those three pieces disagree, the audit script should make the drift visible.
 
-## Features
+## Problem Shape
 
-- Deterministic policy scoring over fixture scenarios.
-- Clear accept or review decisions based on a documented threshold.
-- A command-line or local test path for quick validation.
-- Golden fixture data for repeatable checks.
-- Minimal dependencies and a compact project layout.
+I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
 
-## Architecture Notes
+## Internal Model
 
-The core module exposes a small scoring API. Inputs are simple numeric signals: demand, capacity, latency, risk, and weight. The score uses a threshold of 151, risk penalty 5, latency penalty 3, and weight bonus 3. Tests exercise the public API against the fixture cases in `fixtures/cases.csv`.
+The core is a scoring model over demand, capacity, latency, risk, and weight. That keeps input shape, complexity tradeoffs, and golden cases in one explicit decision path. The threshold is 151, with risk penalty 5, latency penalty 3, and weight bonus 3. The OCaml implementation keeps the data record and functions small enough to load directly in the test file.
 
-## Setup
+## Scenario Walkthrough
 
-Install the OCaml toolchain and run commands from the repository root.
+`examples/extended_cases.csv` adds six named cases. I kept the names plain so failures are easy to read in a terminal: baseline, pressure, surge, degraded, recovery, and boundary.
 
-## Usage
+## Main Behaviors
+
+- Uses fixture data to keep complexity tradeoffs changes visible in code review.
+- Includes extended examples for golden cases, including `recovery` and `degraded`.
+- Documents boundary checks tradeoffs in `docs/operations.md`.
+- Runs locally with a single verification command and no external credentials.
+- Stores project constants and verification metadata in `metadata/project.json`.
+
+## Run It Locally
+
+Install OCaml and run the commands from the repository root. The project does not need credentials or a hosted service.
+
+## Validation
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
+```
+
+The audit command checks repository structure and README constraints before it delegates to the verifier.
+
+## Repository Map
+
+- `src`: primary implementation
+- `tests`: verification harness
+- `fixtures`: compact golden scenarios
+- `examples`: expanded scenario set
+- `metadata`: project constants and verification metadata
+- `docs`: operations and extension notes
+- `scripts`: local verification and audit commands
+
+## Known Edges
+
+The examples cover useful edges, not every edge. A larger version would add malformed-input tests, richer reports, and deeper domain parsers.
+
+## Follow-Up Work
+
+- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
+- Add a short report command that prints the score breakdown for a single scenario.
+- Add malformed input fixtures so the failure path is as visible as the happy path.
+- Add one more algorithms fixture that focuses on a malformed or borderline input.
+
+## How To Run It
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-The verification script builds or runs the project and checks the fixture decisions.
-
-## Tests
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
-```
-
-## Limitations And Roadmap
-
-- The fixture set is intentionally small so it can be audited by hand.
-- Future work could add richer domain-specific input adapters.
-- The model is a local demonstration and does not claim production use.
+This runs the language-level build or test path against the compact fixture set.
