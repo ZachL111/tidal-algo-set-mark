@@ -1,0 +1,73 @@
+{
+  "repo": "tidal-algo-set-mark",
+  "language": "OCaml",
+  "category": "Algorithms",
+  "goal": "Package an OCaml local lab for set analysis with seeded input scenarios, deterministic summary checks, and documented operating limits.",
+  "review_model": {
+    "terms": [
+      "input width",
+      "search depth",
+      "boundary pressure",
+      "complexity"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "input width",
+      "signal": 57,
+      "slack": 41,
+      "drag": 8,
+      "confidence": 78,
+      "score": 209,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "search depth",
+      "signal": 60,
+      "slack": 51,
+      "drag": 25,
+      "confidence": 65,
+      "score": 161,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "boundary pressure",
+      "signal": 78,
+      "slack": 52,
+      "drag": 13,
+      "confidence": 50,
+      "score": 219,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "complexity",
+      "signal": 88,
+      "slack": 54,
+      "drag": 12,
+      "confidence": 83,
+      "score": 277,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "input width",
+      "signal": 67,
+      "slack": 35,
+      "drag": 8,
+      "confidence": 54,
+      "score": 199,
+      "lane": "ship"
+    }
+  ]
+}
